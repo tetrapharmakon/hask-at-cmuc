@@ -2,24 +2,25 @@ module Formal where
 
 import Data.List
 
-data FormalPowerSeries v c = FormalPowerSeries
-    { 
-        eval :: [v] -> c 
+newtype FPS v c =
+  FPS
+    { eval :: [v] -> c
     }
 
-formalSum :: (Num c) => FormalPowerSeries v c -> FormalPowerSeries v c -> FormalPowerSeries v c
-formalSum p q = FormalPowerSeries (\ xs -> (eval p xs) + (eval q xs))
-    
-facs :: [a] -> [([a],[a])]
+fpsSum :: (Num c) => FPS v c -> FPS v c -> FPS v c
+fpsSum p q = FPS (\xs -> eval p xs + eval q xs)
+
+facs :: [a] -> [([a], [a])]
 facs xs = zip (inits xs) (tails xs)
 
-formalMult :: (Num c) => FormalPowerSeries v c -> FormalPowerSeries v c -> FormalPowerSeries v c
-formalMult p q = FormalPowerSeries \ 
+fpsMult :: (Num c) => FPS v c -> FPS v c -> FPS v c
+fpsMult p q = undefined
 
-data Var = X
+data Var =
+  X
 
-f :: FormalPowerSeries Var Int
-f = FormalPowerSeries (length)
+f :: FPS Var Int
+f = FPS length
 
-g :: FormalPowerSeries Var Int
-g = FormalPowerSeries (\ _ -> 2)
+g :: FPS Var Int
+g = FPS (const 2)
