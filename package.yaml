@@ -43,7 +43,7 @@ tests:
         main: Spec.hs
         source-dirs: test
         dependencies:
-            - Lib
+            - Multinomiala
             - hspec
             - hspec-core
             - QuickCheck
