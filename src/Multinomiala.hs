@@ -8,7 +8,7 @@ data Mono =
     { coef :: Integer
     , pw :: Int
     }
-  deriving (Eq, Show, Ord)
+  deriving (Eq, Ord)
 
 monoProd :: Mono -> Mono -> Mono
 monoProd (Mono c e) (Mono c' e') = Mono (c * c') (e + e')
@@ -18,6 +18,17 @@ instance Semigroup Mono where
 
 instance Monoid Mono where
   mempty = Mono 1 0
+
+instance Show Mono where
+  show (Mono c e) = show c ++ "x^" ++ show e
+
+newtype Poly =
+  Poly [Mono]
+
+instance Show Poly where
+  show (Poly []) = ""
+  show (Poly [x]) = show x
+  show (Poly xs) = intercalate "+" $ map show xs
 
 boolToInt :: Bool -> Integer
 boolToInt True = 1
@@ -37,7 +48,7 @@ mSuml [] = Mono 0 0
 mSuml [x] = x
 mSuml (x:xs) = foldl mSumTwo x xs
 
--- sum can be done folding on two sides  
+-- sum can be done folding on two sides
 pSuml :: [Mono] -> [Mono] -> [Mono]
 pSuml p q = map mSuml $ groupBy samePow $ sortOn pw (p ++ q)
   where
