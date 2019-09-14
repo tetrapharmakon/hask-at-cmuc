@@ -20,7 +20,16 @@ instance Monoid Mono where
   mempty = Mono 1 0
 
 instance Show Mono where
-  show (Mono c e) = show c ++ "x^" ++ show e
+  show (Mono c e) = case c of
+    0 -> ""
+    1 -> case e of
+      0         -> "1"
+      1         -> "x"
+      otherwise -> "x^" ++ show e
+    otherwise -> case e of
+      0         -> show c
+      1         -> show c ++ "x"
+      otherwise -> show c ++ "x^" ++ show e
 
 newtype Poly =
   Poly [Mono]
@@ -61,7 +70,7 @@ pSumr p q = map mSumr $ groupBy samePow $ sortOn pw (p ++ q)
 
 pSum :: [[Mono]] -> [Mono]
 pSum []     = []
-pSum [x]    = x
+pSum [x]    = sortOn pw x
 pSum (x:xs) = foldr pSuml x xs -- from testing, we know they are equal
 
 mProd :: Mono -> Mono -> Mono
